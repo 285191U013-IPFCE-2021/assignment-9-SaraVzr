@@ -8,6 +8,16 @@ typedef struct node
   struct node *rchild;
 } node;
 
+typedef struct stack
+{
+  struct item *head;
+} stack;
+
+typedef struct item
+{
+  struct node *node;
+  struct item *next;
+} item;
 
 node *make_node (int num, node * left, node * right);
 
@@ -17,21 +27,16 @@ void print_node (node * p);
 
 void print_tree (node * p, int depth);
 
+stack *recursiveDFT (node *root, stack *s);
+
 void DFT (node * root);
 
-typedef struct stack
-{
-  struct node *node;
-  struct stack *next;
-} stack;
 
 
-stack *push (stack * topp, node * node);
+void push (stack * topp, node * node);
 
 bool isEmpty (stack * topp);
 
-node *top (stack * topp);
-
 stack *pop (stack * topp);
 
-void print_stack (stack * topp);
+void print_stack (item *item);

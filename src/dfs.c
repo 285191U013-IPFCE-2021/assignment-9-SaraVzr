@@ -5,23 +5,56 @@
 #include <stdio.h>		/* scanf, printf */
 #include <stdlib.h>		/* abort */
 #include <stdbool.h>		/* bool, true, false */
-#include "dfs.h"
+#include "..\include\dfs.h"
 
 
 void DFT (node * root)
 {
-	// Implement DFS
-	// Hint: You can use print_node, print_tree and/or print_stack.
+  stack* s = malloc (sizeof(stack));
+  s->head = NULL;
+
+  s = recursiveDFT (root, s);
+  print_stack (s->head);
+
+  return;
+
+}
+
+stack *recursiveDFT (node *root, stack *s)
+{
+  push(s, root);
+
+  if (root->lchild)
+  {
+    recursiveDFT (root->lchild, s);
+  }
+  if (root->rchild)
+  {
+    recursiveDFT (root->rchild, s);
+  }
+ return s;
 }
 
 node *make_node (int num, node * left, node * right)
 {
-	return 0;
+  node *p = malloc(sizeof(node));
+  p->lchild = left;
+  p->rchild = right;
+  p->num = num;
+  p->visited = 0;
+  return p;
 }
 
 void free_node (node * p)
 {
-	
+	if (p->visited == 1)
+    free (p);
+  else
+  {
+    free_node (p->lchild);
+    free_node (p->rchild);
+    free(p);
+  }
 }
 
 
@@ -56,19 +89,34 @@ void print_tree (node * p, int depth)
     print_tree (p->rchild, depth + 1);
 }
 
-stack *push (stack * topp, node * node)
+void push (stack * topp, node * node)
 {
-	return 0;
+  item* element = malloc (sizeof(item));
+ if (isEmpty (topp))
+ {
+   element->next = NULL;
+ }
+ else 
+ {
+   element->next = topp->head;
+ }
+   element->node = node;
+   topp->head = element;
+
+   return;
 }
+
 
 bool isEmpty (stack * topp)
 {
-  return false;
-}
-
-node *top (stack * topp)
-{
-	return 0;
+ if (topp->head == NULL)
+ {
+   return true;
+ }
+ else
+ {
+   return false;
+ }
 }
 
 // Utility function to pop topp  
@@ -79,20 +127,16 @@ stack *pop (stack * topp)
 	return 0;
 }
 
-void print_stack (stack * topp)
+void print_stack (item *item)
 {
-  struct stack *temp = topp;
-
-  while (temp != NULL)
-    {
-
-      print_node (temp->node);
-      printf ("\n");
-
-      temp = temp->next;
-    }
-
-  printf ("====\n");
-
+  if (item->next == NULL)
+  {
+    printf ("%d, ", item->node->num );
+  }
+  else 
+  {
+    print_stack (item->next);
+    printf ("%d, ", item->node->num );
+  }
   return;
 }
